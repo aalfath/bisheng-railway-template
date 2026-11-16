@@ -1,0 +1,12 @@
+# Single-node Elasticsearch for Bisheng on Railway.
+cluster.name: "bisheng"
+discovery.type: single-node
+# HTTP on every IPv4 and IPv6 address (Railway's private network is IPv6).
+# There is no public domain on this service.
+http.host: "::"
+transport.host: "127.0.0.1"
+xpack.security.enabled: true
+xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
+xpack.ml.enabled: false
+cluster.routing.allocation.disk.threshold_enabled: false
