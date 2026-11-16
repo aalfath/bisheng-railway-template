@@ -2,6 +2,7 @@
 # Render the nginx config from Railway variables, then start nginx.
 set -eu
 : "${API_HOST:?API_HOST must be the Bisheng API host:port (private network)}"
+case "$API_HOST" in :*) echo "API_HOST has no host part (${API_HOST}); is the API service deployed?" >&2; exit 1;; esac
 : "${S3_ENDPOINT:?S3_ENDPOINT must be the RustFS host:port (private network)}"
 sed -e "s#__PORT__#${PORT}#g" \
     -e "s#__API_HOST__#${API_HOST}#g" \

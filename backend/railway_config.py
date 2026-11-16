@@ -69,6 +69,35 @@ if ROLE == "api":
             print(f"railway_config: waiting for MySQL ({exc.__class__.__name__})")
             time.sleep(5)
 
+if ROLE == "worker":
+    # Start the workers only once the API has migrated the database to the
+    # current Alembic head (on a fresh deploy both start at the same time).
+    import pymysql
+    from alembic.config import Config as AlembicConfig
+    from alembic.script import ScriptDirectory
+
+    heads = set(ScriptDirectory.from_config(AlembicConfig("/app/alembic.ini")).get_heads())
+    deadline = time.time() + 1200
+    while True:
+        current = set()
+        try:
+            conn = pymysql.connect(host=mysql_host, port=mysql_port, user=mysql_user,
+                                   password=mysql_pass, database=db_name, connect_timeout=10)
+            with conn.cursor() as cur:
+                cur.execute("SELECT version_num FROM alembic_version")
+                current = {row[0] for row in cur.fetchall()}
+            conn.close()
+        except Exception:
+            pass
+        if heads and heads <= current:
+            print("railway_config: database is at the Alembic head")
+            break
+        if time.time() > deadline:
+            print("railway_config: database not at the Alembic head after 20 min; starting anyway")
+            break
+        print("railway_config: waiting for the API to finish database migrations")
+        time.sleep(10)
+
 database_url = (
     f"mysql+pymysql://{quote(mysql_user, safe='')}:{enc(mysql_pass)}"
     f"@{mysql_host}:{mysql_port}/{db_name}?charset=utf8mb4"
