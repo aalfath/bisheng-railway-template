@@ -1,3 +1,5 @@
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/bisheng?utm_medium=integration&utm_source=button&utm_campaign=bisheng)
+
 # Bisheng on Railway
 
 This repo packages [Bisheng](https://github.com/dataelement/bisheng) as a Railway template. Bisheng is an open-source platform for building LLM applications: knowledge bases (RAG), visual workflows, assistants and agents.
