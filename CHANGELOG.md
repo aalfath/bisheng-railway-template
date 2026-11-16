@@ -2,6 +2,10 @@
 
 Deployers: read the entry for a version before you apply its update on Railway.
 
+## 3.0.1-railway.2 (2026-11-16)
+
+- README: add the Deploy on Railway button for the published template (`bisheng`). No change to any service, image or variable; nothing to redeploy.
+
 ## 3.0.1-railway.1 (2026-11-16)
 
 First release of the template.
